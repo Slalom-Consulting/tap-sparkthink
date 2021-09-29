@@ -3,6 +3,7 @@
 import requests
 from pathlib import Path
 from typing import Any, Dict, Optional, Union, List, Iterable, cast
+import json
 
 from singer_sdk.streams import GraphQLStream
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -53,7 +54,7 @@ class ProjectBasedStream(sparkthinkStream):
         """Return a list of partition key dicts (if applicable), otherwise None."""
         if "project" in self.records_jsonpath:
             return [
-                {"project_id": id} for id in cast(list, self.config.get("project_ids"))
+                {"project_id": id} for id in json.loads(self.config.get("project_ids"))
             ]
         
         raise ValueError(
