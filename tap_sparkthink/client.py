@@ -3,7 +3,6 @@
 import requests
 from pathlib import Path
 from typing import Any, Dict, Optional, Union, List, Iterable, cast
-import json
 
 from singer_sdk.streams import GraphQLStream
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -52,11 +51,12 @@ class ProjectBasedStream(sparkthinkStream):
     @property
     def partitions(self) -> List[dict]:
         """Return a list of partition key dicts (if applicable), otherwise None."""
+        
         if "project" in self.records_jsonpath:
             return [
-                {"project_id": id} for id in json.loads(self.config.get("project_ids"))
+                {"project_id": id} for id in [ x.strip() for x in self.config.get("project_ids").strip('[]').split(',') ]
             ]
-        
+
         raise ValueError(
             "Could not detect partition type for stream "
             f"'{self.name}' ({self.records_jsonpath}). "
