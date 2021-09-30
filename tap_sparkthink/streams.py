@@ -225,7 +225,7 @@ class TeamMembersStream(ProjectBasedStream):
         th.Property("email", th.StringType),
         th.Property("role", th.StringType),
     ).to_dict()
-    primary_keys = ["id"]
+    primary_keys = ["project_id", "id"]
     replication_key = None
     records_jsonpath = "$.data.project.teamMembers[*]"
 
@@ -269,7 +269,7 @@ class RespondentsStream(ProjectBasedStream):
             )
         ),
     ).to_dict()
-    primary_keys = ["userId"]
+    primary_keys = ["project_id", "userId"]
     replication_key = None
     records_jsonpath = "$.data.project.respondents[*]"
 
@@ -360,7 +360,7 @@ class ResponsesStream(ProjectBasedStream):
             th.ArrayType(th.StringType)
         ),
     ).to_dict()
-    primary_keys = ["id"]
+    primary_keys = ["project_id", "id"]
     replication_key = None
     records_jsonpath = "$.data.project.responses[*]"
 
@@ -592,7 +592,7 @@ class QuestionsStream(ProjectBasedStream):
             )
         ),
     ).to_dict()
-    primary_keys = ["id"]
+    primary_keys = ["project_id", "id"]
     replication_key = None
     records_jsonpath = "$.data.project.questions[*]"
 
