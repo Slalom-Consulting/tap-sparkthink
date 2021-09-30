@@ -517,6 +517,7 @@ class QuestionsStream(ProjectBasedStream):
                 th.Property("title", th.StringType),
             )
         ),
+        th.Property("hidden", th.BooleanType),
         th.Property(
             "logic",
             th.ObjectType(
