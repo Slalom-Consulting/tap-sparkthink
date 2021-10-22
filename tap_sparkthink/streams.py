@@ -427,6 +427,7 @@ class QuestionsStream(ProjectBasedStream):
         th.Property("project_id", th.StringType),
         th.Property("id", th.StringType),
         th.Property("__typename", th.StringType),
+        th.Property("required", th.BooleanType),
         th.Property(
             "metadata",
             th.ObjectType(
@@ -605,6 +606,28 @@ class QuestionsStream(ProjectBasedStream):
                 ... on Survey {
                     questions {
                         id
+                        __typename
+                        ... on MatrixQuestion {
+                            required
+                        }
+                        ... on MultipleChoiceQuestion {
+                            required
+                        }
+                        ... on MultipleChoiceStackQuestion {
+                            required
+                        }
+                        ... on RankingQuestion {
+                            required
+                        }
+                        ... on RatingQuestion {
+                            required
+                        }
+                        ... on SliderQuestion {
+                            required
+                        }
+                        ... on TextEntryQuestion {
+                            required
+                        }
                         content {
                             backgroundImageUrl
                             description
