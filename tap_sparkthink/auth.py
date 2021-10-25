@@ -23,7 +23,7 @@ class sparkthinkAuthenticator(OAuthJWTAuthenticator):
         """Return request payload for OAuth request."""
 
         return  {
-            "AccessCode": self.config['access_code']
+            "clientSecret": self.config['client_secret']
         }
 
     # Authentication and refresh
