@@ -375,10 +375,10 @@ class ResponsesStream(ProjectBasedStream):
     @property
     def query(self) -> str:
         return """
-            query Responses($project_id: ID!) {
+            query Responses($project_id: ID!, $response_batch_size: Int) {
                 """  \
             + f"project(id: $project_id)" + """{
-                    responses {
+                    responses(first: $response_batch_size) {
                                 edges {
                                     node {
                                         id
