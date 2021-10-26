@@ -43,8 +43,8 @@ class sparkthinkStream(GraphQLStream):
         return self.config.get("response_batch_size")
     
     @property
-    def response_default_batch_size(self) -> str:
-        """Return the project_id."""
+    def response_default_batch_size(self) -> int:
+        """Return the response_default_batch_size."""
         return 10
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
