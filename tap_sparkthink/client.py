@@ -83,7 +83,10 @@ class ProjectBasedStream(sparkthinkStream):
         """Return a dictionary of values for each query variable
 
         """
-        return context if "project_id" in context else {}
+        if next_page_token:
+            context['cursor'] = next_page_token
+        
+        return context or {}
 
     def post_process(self, row: dict, context: Optional[dict] = None) -> dict:
         """As needed, append or transform raw data to match expected structure."""

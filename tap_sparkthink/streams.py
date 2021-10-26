@@ -371,14 +371,15 @@ class ResponsesStream(ProjectBasedStream):
     primary_keys = ["project_id", "id"]
     replication_key = None
     records_jsonpath = "$.data.project.responses.edges[*]"
+    next_page_token_jsonpath = "$.data.project.responses.edges[-1:].cursor"
 
     @property
     def query(self) -> str:
         return """
-            query Responses($project_id: ID!, $response_batch_size: Int) {
+            query Responses($project_id: ID!, $response_batch_size: Int, $cursor: String) {
                 """  \
             + f"project(id: $project_id)" + """{
-                    responses(first: $response_batch_size) {
+                    responses(first: $response_batch_size, after: $cursor) {
                                 edges {
                                     node {
                                         id
