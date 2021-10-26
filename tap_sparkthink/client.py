@@ -91,6 +91,10 @@ class ProjectBasedStream(sparkthinkStream):
             self.logger.warning(f"No data for project_id '{context['project_id']}'")
             return {} # handle bad/empty row (no data found based on given project_id)
 
+        if row.get('node') and row.get('cursor'):
+            row['node']['cursor'] = row['cursor']
+            row = row['node']
+        
         row['project_id'] = context['project_id'] 
                  
         return row
