@@ -10,7 +10,6 @@ from tap_sparkthink.streams import (
     sparkthinkStream,
     MyProjectsStream,
     ProjectStream,
-    # ProjectsListStream,
     TeamMembersStream,
     RespondentsStream,
     ResponsesStream,
@@ -21,7 +20,6 @@ from tap_sparkthink.streams import (
 STREAM_TYPES = [
     MyProjectsStream,
     ProjectStream,
-    # ProjectsListStream,
     TeamMembersStream,
     RespondentsStream,
     ResponsesStream,
