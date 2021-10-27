@@ -103,6 +103,7 @@ class ProjectsListStream(sparkthinkStream):
             query ProjectsList {
                 """  \
              + "projects" + """ {
+                    id
                     clientName
                     coverImageUrl
                     description
