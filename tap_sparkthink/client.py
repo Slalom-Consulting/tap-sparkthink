@@ -33,7 +33,7 @@ class sparkthinkStream(GraphQLStream):
         return headers
     
     @property
-    def response_batch_size(self) -> str:
+    def response_batch_size(self) -> int:
         """Return the response_batch_size."""
         return self.config.get("response_batch_size")
     
