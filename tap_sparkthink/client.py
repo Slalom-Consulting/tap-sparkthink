@@ -31,11 +31,6 @@ class sparkthinkStream(GraphQLStream):
         if "user_agent" in self.config:
             headers["User-Agent"] = self.config.get("user_agent")
         return headers
-
-    @property
-    def project_id(self) -> str:
-        """Return the project_id."""
-        return self.config.get("project_id")
     
     @property
     def response_batch_size(self) -> str:
