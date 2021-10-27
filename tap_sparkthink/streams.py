@@ -103,6 +103,7 @@ class ProjectsListStream(sparkthinkStream):
             query ProjectsList {
                 """  \
              + "projects" + """ {
+                    id
                     clientName
                     coverImageUrl
                     description
@@ -325,7 +326,7 @@ class ResponsesStream(ProjectBasedStream):
         ),
         th.Property("questionId", th.StringType),
         th.Property(
-            "nestedOptionResponseOptions",
+            "NestedOptionResponseOptions",
             th.ArrayType(
                 th.ObjectType(
                     th.Property("id", th.StringType),
@@ -344,7 +345,7 @@ class ResponsesStream(ProjectBasedStream):
             )
         ),
         th.Property(
-            "optionResponseValue",
+            "OptionResponseValue",
             th.ArrayType(
                 th.ObjectType(
                     th.Property("id", th.StringType),
@@ -353,64 +354,80 @@ class ResponsesStream(ProjectBasedStream):
                 )
             )
         ),
-        th.Property("numericResponseValue", th.IntegerType),
-        th.Property("textResponseValue", th.StringType),
+        th.Property("NumericResponseValue", th.IntegerType),
+        th.Property("TextResponseValue",
+            th.ArrayType(
+                th.ObjectType(
+                    th.Property("id", th.StringType),
+                    th.Property("userInput", th.StringType),
+                )
+            )
+        ),
         th.Property(
-            "listResponseValue",
+            "ListResponseValue",
             th.ArrayType(th.StringType)
         ),
     ).to_dict()
     primary_keys = ["project_id", "id"]
     replication_key = None
-    records_jsonpath = "$.data.project.responses[*]"
+    records_jsonpath = "$.data.project.responses.edges[*].node"
+    next_page_token_jsonpath = "$.data.project.responses.edges[-1:].cursor"
 
     @property
     def query(self) -> str:
         return """
-            query Responses($project_id: ID!) {
+            query Responses($project_id: ID!, $response_batch_size: Int, $cursor: String) {
                 """  \
             + f"project(id: $project_id)" + """{
-                    responses {
-                                id
-                                __typename
-                                active
-                                locale
-                                metadata {
-                                    createdBy {
+                    responses(first: $response_batch_size, after: $cursor) {
+                                edges {
+                                    node {
                                         id
-                                        name
-                                        email
-                                    }
-                                    createdUTC
-                                    lastModifiedUTC
-                                }
-                                questionId
-                                ... on NestedOptionResponse {
-                                    nestedOptionResponseOptions: options {
-                                        id
-                                        label
-                                        value {
-                                            id
-                                            label
-                                            additionalUserInput
+                                        __typename
+                                        active
+                                        locale
+                                        metadata {
+                                            createdBy {
+                                                id
+                                                name
+                                                email
+                                            }
+                                            createdUTC
+                                            lastModifiedUTC
+                                        }
+                                        questionId
+                                        ... on NestedOptionResponse {
+                                            NestedOptionResponseOptions: options {
+                                                id
+                                                label
+                                                value {
+                                                    id
+                                                    label
+                                                    additionalUserInput
+                                                }
+                                            }
+                                        }
+                                        ... on TextResponse {
+                                            TextResponseValue: value {
+                                                id 
+                                                userInput
+                                            }
+                                        }
+                                        ... on NumericResponse {
+                                            NumericResponseValue: value
+                                        }
+                                        ... on OptionResponse {
+                                            OptionResponseValue: value {
+                                                id
+                                                label
+                                                additionalUserInput
+                                            }
+                                        }
+                                        ... on ListResponse {
+                                            ListResponseValue: value
                                         }
                                     }
-                                }
-                                ... on TextResponse {
-                                    textResponseValue: value
-                                }
-                                ... on NumericResponse {
-                                    numericResponseValue: value
-                                }
-                                ... on OptionResponse {
-                                    optionResponseValue: value{
-                                        id
-                                        label
-                                        additionalUserInput
-                                    }
-                                }
-                                ... on ListResponse {
-                                    listResponseValue: value
+                                    cursor
                                 }
                             }
                         }

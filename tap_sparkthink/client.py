@@ -31,11 +31,16 @@ class sparkthinkStream(GraphQLStream):
         if "user_agent" in self.config:
             headers["User-Agent"] = self.config.get("user_agent")
         return headers
-
+    
     @property
-    def project_id(self) -> str:
-        """Return the project_id."""
-        return self.config.get("project_id")
+    def response_batch_size(self) -> int:
+        """Return the response_batch_size."""
+        return self.config.get("response_batch_size")
+    
+    @property
+    def response_default_batch_size(self) -> int:
+        """Return the response_default_batch_size."""
+        return 10
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result rows."""
@@ -54,7 +59,11 @@ class ProjectBasedStream(sparkthinkStream):
         
         if "project" in self.records_jsonpath:
             return [
-                {"project_id": id} for id in [ x.strip() for x in self.config.get("project_ids").strip('[]').split(',') ]
+                {
+                    "project_id": id,
+                    "response_batch_size": self.response_batch_size or self.response_default_batch_size
+                } 
+                for id in [ x.strip() for x in self.config.get("project_ids").strip('[]').split(',') ]
             ]
 
         raise ValueError(
@@ -69,7 +78,10 @@ class ProjectBasedStream(sparkthinkStream):
         """Return a dictionary of values for each query variable
 
         """
-        return context if "project_id" in context else {}
+        if next_page_token:
+            context['cursor'] = next_page_token
+        
+        return context or {}
 
     def post_process(self, row: dict, context: Optional[dict] = None) -> dict:
         """As needed, append or transform raw data to match expected structure."""
