@@ -366,11 +366,10 @@ class ResponsesStream(ProjectBasedStream):
             "ListResponseValue",
             th.ArrayType(th.StringType)
         ),
-        th.Property("cursor", th.StringType) # todo: change to selected=False  
     ).to_dict()
     primary_keys = ["project_id", "id"]
     replication_key = None
-    records_jsonpath = "$.data.project.responses.edges[*]"
+    records_jsonpath = "$.data.project.responses.edges[*].node"
     next_page_token_jsonpath = "$.data.project.responses.edges[-1:].cursor"
 
     @property
