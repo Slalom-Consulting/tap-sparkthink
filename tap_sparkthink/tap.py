@@ -36,6 +36,8 @@ class Tapsparkthink(Tap):
         th.Property("api_endpoint", th.StringType, required=True),
         th.Property("service_account_id", th.StringType, required=True),
         th.Property("client_secret", th.StringType, required=True),
+        th.Property("project_ids", th.StringType, required=True),
+        th.Property("response_batch_size", th.IntegerType, required=False),
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
