@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Union, List, Iterable
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
+from singer_sdk.helpers._singer import SelectionMask
 
 from tap_sparkthink.client import ProjectBasedStream, sparkthinkStream
 
@@ -367,11 +368,29 @@ class ResponsesStream(ProjectBasedStream):
             "ListResponseValue",
             th.ArrayType(th.StringType)
         ),
+        th.Property("cursor", th.StringType),
+        th.Property("response_batch_size", th.IntegerType),
     ).to_dict()
     primary_keys = ["project_id", "id"]
     replication_key = None
     records_jsonpath = "$.data.project.responses.edges[*].node"
     next_page_token_jsonpath = "$.data.project.responses.edges[-1:].cursor"
+
+    @property
+    def mask(self) -> SelectionMask:
+        """Get a boolean mask for stream and property selection.
+
+        Returns:
+            A mapping of breadcrumbs to boolean values, representing stream and field
+            selection.
+        """
+        if self._mask is None:
+            self._mask = self.metadata.resolve_selection()
+        
+        self._mask[('properties', 'cursor')] = False
+        self._mask[('properties', 'response_batch_size')] = False
+
+        return self._mask
 
     @property
     def query(self) -> str:
