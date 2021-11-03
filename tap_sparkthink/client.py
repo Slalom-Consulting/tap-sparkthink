@@ -35,12 +35,12 @@ class sparkthinkStream(GraphQLStream):
     @property
     def response_batch_size(self) -> int:
         """Return the response_batch_size."""
-        return self.config.get("response_batch_size")
+        return int(self.config.get("response_batch_size"))
     
     @property
     def response_default_batch_size(self) -> int:
         """Return the response_default_batch_size."""
-        return 10
+        return 100
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         """Parse the response and return an iterator of result rows."""
