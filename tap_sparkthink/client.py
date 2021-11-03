@@ -35,7 +35,7 @@ class sparkthinkStream(GraphQLStream):
     @property
     def response_batch_size(self) -> int:
         """Return the response_batch_size."""
-        return self.config.get("response_batch_size")
+        return int(self.config.get("response_batch_size"))
     
     @property
     def response_default_batch_size(self) -> int:
