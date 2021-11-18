@@ -257,6 +257,7 @@ class RespondentsStream(ProjectBasedStream):
         th.Property("userId", th.StringType),
         th.Property("name", th.StringType),
         th.Property("email", th.StringType),
+        th.Property("status", th.StringType),
         th.Property("collectorId", th.StringType),
         th.Property("collectorTitle", th.StringType),
         th.Property("projectId", th.StringType), # todo: check if this matches project_id in all cases
@@ -284,6 +285,7 @@ class RespondentsStream(ProjectBasedStream):
                         userId
                         name
                         email
+                        status
                         collectorId
                         collectorTitle
                         projectId
