@@ -1,7 +1,0 @@
-{
-    "auth_endpoint": "url",
-    "api_endpoint": "url",
-    "service_account_id": "username",
-    "access_code": "password",
-    "project_id": "projectId"
-}

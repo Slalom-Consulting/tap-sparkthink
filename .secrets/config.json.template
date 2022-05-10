@@ -3,6 +3,6 @@
     "api_endpoint": "url",
     "service_account_id": "username",
     "client_secret": "password",
-    "project_ids": "[projectIds]"
-    "reponse_batch_size": "100"
+    "project_ids": "[projectIds]",
+    "response_batch_size": "100"
 }
