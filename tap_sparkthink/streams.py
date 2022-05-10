@@ -273,25 +273,31 @@ class RespondentsStream(ProjectBasedStream):
     ).to_dict()
     primary_keys = ["project_id", "userId"]
     replication_key = None
-    records_jsonpath = "$.data.project.respondents[*]"
+    records_jsonpath = "$.data.project.respondents.edges[*].node"
+    next_page_token_jsonpath = "$.data.project.respondents.edges[-1:].cursor"
 
     @property
     def query(self) -> str:
         return """
-            query RespondentDetails($project_id: ID!) {
+            query RespondentDetails($project_id: ID!, $response_batch_size: Int, $cursor: String) {
                 """  \
             + f"project(id: $project_id)" + """{
-                    respondents {
-                        userId
-                        name
-                        email
-                        status
-                        collectorId
-                        collectorTitle
-                        projectId
-                        attributes {
-                            key
-                            value
+                    respondents (first: $response_batch_size, after: $cursor) {
+                        edges{
+                            node{
+                                userId
+                                name
+                                email
+                                status
+                                collectorId
+                                collectorTitle
+                                projectId
+                                attributes {
+                                    key
+                                    value
+                                }
+                            }
+                            cursor
                         }
                     }
                 }
