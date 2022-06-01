@@ -333,6 +333,7 @@ class ResponsesStream(ProjectBasedStream):
             )
         ),
         th.Property("questionId", th.StringType),
+        th.Property("collectorId", th.StringType),
         th.Property(
             "NestedOptionResponseOptions",
             th.ArrayType(
@@ -404,6 +405,7 @@ class ResponsesStream(ProjectBasedStream):
                                             lastModifiedUTC
                                         }
                                         questionId
+                                        collectorId
                                         ... on NestedOptionResponse {
                                             NestedOptionResponseOptions: options {
                                                 id
