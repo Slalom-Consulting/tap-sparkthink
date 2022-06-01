@@ -271,7 +271,7 @@ class RespondentsStream(ProjectBasedStream):
             )
         ),
     ).to_dict()
-    primary_keys = ["project_id", "userId"]
+    primary_keys = ["project_id", "userId", "collectorId"]
     replication_key = None
     records_jsonpath = "$.data.project.respondents.edges[*].node"
     next_page_token_jsonpath = "$.data.project.respondents.edges[-1:].cursor"
