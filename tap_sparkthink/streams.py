@@ -643,6 +643,9 @@ class QuestionsStream(ProjectBasedStream):
                         ... on MultipleChoiceStackQuestion {
                             required
                         }
+                        ... on NPSQuestion {
+                            required
+                        }
                         ... on RankingQuestion {
                             required
                         }
@@ -697,6 +700,13 @@ class QuestionsStream(ProjectBasedStream):
                                     id
                                     title
                                     description
+                                }
+                            }
+                            ... on NPSQuestionContent {
+                                showLabels
+                                labels {
+                                    left
+                                    right
                                 }
                             }
                             ... on RankingQuestionContent {
