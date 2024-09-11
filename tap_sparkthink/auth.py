@@ -1,4 +1,4 @@
-"""gapi Authentication."""
+"""sparkthink Authentication."""
 from __future__ import annotations
 from singer_sdk.helpers._util import utc_now
 import requests
