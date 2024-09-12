@@ -22,7 +22,7 @@ class sparkthinkStream(GraphQLStream):
     @property
     def authenticator(self) -> sparkthinkAuthenticator:
         """Return a new authenticator object."""
-        return sparkthinkAuthenticator.create_for_stream(self)
+        return sparkthinkAuthenticator(self)
 
     @property
     def http_headers(self) -> dict:
